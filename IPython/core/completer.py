@@ -1997,6 +1997,12 @@ class IPCompleter(Completer):
                     return name_text, name_matches[:MATCHES_LIMIT], \
                            [meth.__qualname__]*min(len(name_matches), MATCHES_LIMIT), ()
 
+        if macros := getattr(self, 'macros', {}):
+            try:
+                mac = macros[text]
+                return text, [mac, text], (len(mac), len(text)), ()
+            except KeyError:
+                pass
 
         # If no line buffer is given, assume the input text is all there was
         if line_buffer is None:
